@@ -2,18 +2,19 @@ total_joltage = 0
 with open('day3_input.txt', 'r') as file:
     for line in file:
         bank = line.strip()
-        battery1_joltage = -1
-        barry1_ind = -1
-        for battery_ind in range(len(bank[:-1])):
-            battery_joltage = int(bank[battery_ind])
-            if battery_joltage > battery1_joltage:
-                battery1_joltage = battery_joltage
-                battery1_ind = battery_ind
-        battery2_joltage = -1
-        for battery_ind in range(battery1_ind + 1, len(bank)):
-            battery_joltage = int(bank[battery_ind])
-            if battery_joltage > battery2_joltage:
-                battery2_joltage = battery_joltage
-        bank_joltage = battery1_joltage*10 + battery2_joltage
+        joltages = []
+        for i in range(len(bank)):
+            remain = len(bank) - i
+            space = 12 - len(joltages)
+            while joltages and bank[i] > joltages[-1] and remain > space:
+                joltages.pop()
+                remain = len(bank) - i
+                space = 12 - len(joltages)
+            if len(joltages) < 12:
+                joltages.append(bank[i])
+
+        bank_joltage = 0
+        for i in range(len(joltages)):
+            bank_joltage += int(joltages[-i - 1]) * 10**i
         total_joltage += bank_joltage
 print(total_joltage)
